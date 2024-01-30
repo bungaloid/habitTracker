@@ -1,8 +1,8 @@
 goodHabits = []
 badHabits = []
 
-class Habit:
-    def __init__(self, habitName, habitDescription):
+# class Habit:
+#     def __init__(self, habitName, habitDescription):
 
 
 def selection():
@@ -17,8 +17,8 @@ def selection():
             removeHabit()
         elif(selectionChoice == 3):
             print("-" * 30)
-            print("Good Habits:", goodHabits)
-            print("Bad Habits:", badHabits)
+            printChoice = int(input("What would you like to check?\n1: Good Habits\n2: Bad Habit\n3: Both Habits\n"))
+            printHabits(printChoice)
             print("-" * 30)
         elif(selectionChoice == 4):
             selectionLoop = False
@@ -78,9 +78,16 @@ def removeHabit():
         habitList.remove(habitList[removeIndex])
         print(30 * "-")
 
-
-    
-
+def printHabits(printChoice):
+    if(printChoice == 1):
+        print("Good Habits:\n" + str(goodHabits))
+    elif(printChoice == 2):
+        print("Bad Habits:\n" + str(badHabits))
+    elif(printChoice == 3):
+        print("Good Habits:\n" + str(goodHabits))
+        print("Bad Habits:\n" + str(badHabits))
+    else:
+        print("Invalid Choice")
 
 selection()
 
