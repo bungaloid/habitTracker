@@ -1,8 +1,10 @@
 goodHabits = []
 badHabits = []
 
-# class Habit:
-#     def __init__(self, habitName, habitDescription):
+class Habit:
+    def __init__(self, habitName, habitDescription):
+        self.habitName = habitName
+        self.habitDescription = habitDescription
 
 
 def selection():
@@ -33,11 +35,9 @@ def addHabit():
     while(habitMenuLoop):
         habitChoice = int(input("What habit would you like to add?\n1: Good Habit\n2: Bad Habit\n3: Return to Menu\n"))
         if(habitChoice == 1):
-            print("-" * 30)
-            goodHabits.append(input("Enter a good habit: "))
+            habitList = goodHabits
         elif(habitChoice == 2):
-            print("-" * 30)
-            badHabits.append(input("Enter a bad habit: "))
+            habitList = badHabits
         elif(habitChoice == 3):
             print("-" * 30)
             habitMenuLoop = False
@@ -47,6 +47,8 @@ def addHabit():
             print("Please enter a valid option")
             print("-" * 30)
             continue
+        print("-" * 30)
+        habitList.append(input("Enter a habit name: "))
         addNewHabit = int(input("Would you like to add another habit?\n1: Yes\n2: No\n"))
         if(addNewHabit == 1):
             print("-" * 30)
@@ -88,6 +90,3 @@ def printHabits(printChoice):
         print("Bad Habits:\n" + str(badHabits))
     else:
         print("Invalid Choice")
-
-selection()
-
