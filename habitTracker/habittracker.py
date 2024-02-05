@@ -6,6 +6,18 @@ class Habit:
         self.habitName = habitName
         self.habitDescription = habitDescription
 
+    def getHabitName(self):
+        return self.habitName
+
+    def getHabitDescription(self):
+        return self.habitDescription
+
+    def setHabitName(self, habitName):
+        self.habitName = habitName
+
+    def setHabitDescription(self, habitDescription):
+        self.habitDescription = habitDescription
+
 
 def selection():
     selectionLoop = True
