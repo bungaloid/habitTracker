@@ -2,9 +2,9 @@ goodHabits = []
 badHabits = []
 
 class Habit:
-    def __init__(self, habitName, habitDescription):
+    def __init__(self, habitName, habitInstructions):
         self.habitName = habitName
-        self.habitDescription = habitDescription
+        self.habitInstructions = habitInstructions
 
 
 def selection():
@@ -48,7 +48,9 @@ def addHabit():
             print("-" * 30)
             continue
         print("-" * 30)
-        habitList.append(input("Enter a habit name: "))
+        habitName = input("Enter a habit name: ")
+        habitInstructions = input("Enter your habit's instructions: ")
+        habitList.append(Habit(habitName, habitInstructions))
         addNewHabit = int(input("Would you like to add another habit?\n1: Yes\n2: No\n"))
         if(addNewHabit == 1):
             print("-" * 30)
@@ -82,11 +84,18 @@ def removeHabit():
 
 def printHabits(printChoice):
     if(printChoice == 1):
-        print("Good Habits:\n" + str(goodHabits))
+        for habit in goodHabits:
+            print("Good Habits:\n\n" + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
     elif(printChoice == 2):
-        print("Bad Habits:\n" + str(badHabits))
+        for habit in badHabits:
+            print("Bad Habits:\n\n"  + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
     elif(printChoice == 3):
-        print("Good Habits:\n" + str(goodHabits))
-        print("Bad Habits:\n" + str(badHabits))
+        for habit in goodHabits:
+            print("Good Habits:\n" + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+        print("\n")
+        for habit in badHabits:
+            print("Bad Habits:\n"  + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
     else:
         print("Invalid Choice")
+
+selection()
