@@ -85,7 +85,7 @@ def removeHabit():
         return
     print("Which habit would you like to remove?")
     for i in range(0,len(habitList)):
-        print(str(i + 1) + ": " + str(habitList[i]))
+        print(str(i + 1) + ": " + str(habitList[i].habitName))
     removeIndex = int(input()) - 1
     if (removeIndex < 0) or (removeIndex > len(habitList)):
         print("Invalid choice")
@@ -96,17 +96,21 @@ def removeHabit():
 
 def printHabits(printChoice):
     if(printChoice == 1):
+        print("Good Habits:\n\n")
         for habit in goodHabits:
-            print("Good Habits:\n\n" + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
     elif(printChoice == 2):
+        print("Bad Habits:\n\n")
         for habit in badHabits:
-            print("Bad Habits:\n\n"  + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
     elif(printChoice == 3):
+        print("Good Habits:\n\n")
         for habit in goodHabits:
-            print("Good Habits:\n" + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
         print("\n")
+        print("Bad Habits:\n\n")
         for habit in badHabits:
-            print("Bad Habits:\n"  + "Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
     else:
         print("Invalid Choice")
 
