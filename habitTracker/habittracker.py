@@ -86,14 +86,21 @@ def removeHabit():
     print("Which habit would you like to remove?")
     for i in range(0,len(habitList)):
         print(str(i + 1) + ": " + str(habitList[i].habitName))
-    removeIndex = int(input()) - 1
-    if (removeIndex < 0) or (removeIndex > len(habitList)):
-        print("Invalid choice")
+    try:
+        removeIndex = int(input()) - 1
+    except ValueError:
+        print("Out of bounds")
         print("Returning to menu")
-    else:
+        return
+    try:
         habitList.remove(habitList[removeIndex])
-        print(30 * "-")
+    except IndexError:
+        print("Out of bounds")
+        print("Returning to menu")
+    print(30 * "-")
 
+#Do something when nothing is in list
+#Or when given strings
 def printHabits(printChoice):
     if(printChoice == 1):
         print("Good Habits:\n\n")
