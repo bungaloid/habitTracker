@@ -38,13 +38,25 @@ def selection():
         elif(selectionChoice == 3):
             print("-" * 30)
             try:
-                printChoice = int(input("What would you like to check?\n1: Good Habits\n2: Bad Habit\n3: Both Habits\n"))
+                printChoice = int(input("What would you like to check?\n1: Good Habits\n2: Bad Habit\n3: Both Habits\n4:Return to menu "))
             except ValueError:
                 print("-" * 30)
                 print("Invalid value")
                 print("-" * 30)
                 continue
-            printHabits(printChoice)
+            if(printChoice == 1):
+                printHabits(goodHabits)
+            elif(printChoice == 2):
+                printHabits(badHabits)
+            elif(printChoice == 3):
+                printHabits(goodHabits, badHabits)
+            elif(printChoice == 4):
+                continue
+            else:
+                print("-" * 30)
+                print("Invalid number")
+                print("-" * 30)
+                continue
             print("-" * 30)
         elif(selectionChoice == 4):
             print("-" * 30)
@@ -88,45 +100,76 @@ def addHabit():
             print("Invalid option")
             print("-" * 30)
 
-#Add a while loop inside to ask the user if they would like to remove another habit, to keep it consitent with add habit
+#Fix logic on removeHabit
 def removeHabit():
     habitList = selectHabitList()
+    print(30 * "-")
     if(habitList == 0):
+        print("Returning to menu")
+        print(30 * "-")
+        return
+    if(isListEmpty(habitList) == True):
+        print("Nothing to remove in list, returning to menu")
         print(30 * "-")
         return
     removeIndex = selectHabit(habitList)
+    print(30 * "-")
     if(removeIndex == "menu"):
+        print("Returning to menu")
         print(30 * "-")
         return
     try:
+        print("Removing " + str(habitList[removeIndex].habitName))
         habitList.remove(habitList[removeIndex])
     except IndexError:
-        print("Out of bounds")
-        print("Returning to menu")
+        print("Invalid Option")
+        print("What kind of habits would you like to remove?")
+        removeHabit()
+        return
     print(30 * "-")
+    removeHabitLoop = True
+    while(removeHabitLoop):
+        if(len(goodHabits) and len(badHabits) > 0):
+            try:
+                removeNewHabit = int(input("Would you like to remove another habit?\n1: Yes\n2: No\n"))
+            except ValueError:
+                print("-" * 30)
+                print("Invalid value, please enter a valid option")
+                print("-" * 30)
+                continue
+            if(removeNewHabit == 1):
+                print("-" * 30)
+                removeHabit()
+                return
+            elif(removeNewHabit == 2):
+                print("-" * 30)
+                return
+            else:
+                print("-" * 30)
+                print("Invalid option")
+                print("-" * 30)
+        else:
+            print("There are no more habits to remove")
+            print("Returning to menu")
+            return
 
-#Do something when nothing is in list
-#Add a while loop just in case user inputs something that they shouldn't
-def printHabits(printChoice):
-    print()
-    if(printChoice == 1):
-        print("Good Habits:\n")
-        for habit in goodHabits:
+def printHabits(habitList, secondHabitList = []):
+    print(30 * "-")
+    if((isListEmpty(secondHabitList)) and (isListEmpty(habitList))):
+        print("No habits to display")
+        return
+    elif(isListEmpty(secondHabitList)):
+        for habit in habitList:
             print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
-    elif(printChoice == 2):
-        print("Bad Habits:\n")
-        for habit in badHabits:
-            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
-    elif(printChoice == 3):
+    else:
         print("Good Habits:\n")
-        for habit in goodHabits:
+        for habit in habitList:
             print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
         print(30 * "-")
         print("Bad Habits:\n")
-        for habit in badHabits:
+        for habit in secondHabitList:
             print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
-    else:
-        print("Invalid Choice")
+
 
 #Add lines where needed
 def editHabit():
@@ -134,6 +177,11 @@ def editHabit():
     habitList = selectHabitList()
     print(30 * "-")
     if(habitList == 0):
+        print("Returning to menu")
+        print(30 * "-")
+        return
+    if(isListEmpty(habitList)):
+        print("Nothing to remove in list, returning to menu")
         return
     habitIndex = selectHabit(habitList)
     print(30 * "-")
@@ -168,9 +216,10 @@ def editHabit():
             print("Invalid option")
             print("-" * 30)
             continue
-    editAgain = input("Would you like to edit another habit?\n1: Yes\n2: No\n")
+    editAgain = int(input("Would you like to edit another habit?\n1: Yes\n2: No\n"))
     while(editAgain != 2):
         if(editAgain == 1):
+            print(30 * "-")
             editHabit()
             return
         print(30 * "-")
@@ -181,25 +230,34 @@ def editHabit():
 
 
 #Make a while loop that doesn't let you leave until you input a valid option
-#Add an option '0' that returns user to menu
 def selectHabit(habitList):
-    print("Which habit would you like to select?")
-    for i in range(0,len(habitList)):
-        print(str(i + 1) + ": " + str(habitList[i].habitName))
-    try:
-        selectIndex = int(input()) - 1
-    except ValueError:
-        print(30 * "-")
-        print("Invalid Value Type")
-        print("Returning to menu")
-        return "menu"
-    return selectIndex
+    habitLoop = True
+    while(habitLoop):
+        print("Which habit would you like to select?")
+        for i in range(0,len(habitList)):
+            print(str(i + 1) + ": " + str(habitList[i].habitName))
+        print("0: Return to menu")
+        try:
+            selectIndex = int(input()) - 1
+        except ValueError:
+            print(30 * "-")
+            print("Invalid Value Type")
+            print(30 * "-")
+            continue
+        if(selectIndex == -1):
+            return "menu"
+        elif((selectIndex < -1) or (selectIndex > len(habitList))):
+            print("Value Out of Bounds")
+            continue
+        else:
+            habitLoop = False
+            return selectIndex
 
 def selectHabitList():  
     habitLoop = True
     while(habitLoop):
         try:
-            habitChoice = int(input("What kind of habits?\n1: Good Habit\n2: Bad Habit\n3: Return to Menu\n"))
+            habitChoice = int(input("1: Good Habit\n2: Bad Habit\n3: Return to Menu\n"))
         except ValueError:
             print("-" * 30)
             print("Invalid value, please enter a valid option")
@@ -216,5 +274,11 @@ def selectHabitList():
             print("-" * 30)
             print("Please enter a valid option")
             print("-" * 30)
+
+def isListEmpty(habitList):
+    if(len(habitList) == 0):
+        return True
+    else:
+        return False
 
 selection()
