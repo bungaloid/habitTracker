@@ -32,7 +32,7 @@ def selection():
     selectionLoop = True
     while(selectionLoop):
         try:
-            selectionChoice = int(input("1: Add Habit\n2: Remove Habit\n3: Check Habits\n4: Edit Habit\n5: Quit Program\n"))
+            selectionChoice = int(input("1: Add Habit\n2: Remove Habit\n3: Check Habits\n4: Edit Habit\n5: Report Daily Habit Progress\n6: Quit Program\n"))
         except ValueError:
             print("-" * 30)
             print("Invalid value, please enter a valid option")
@@ -47,7 +47,7 @@ def selection():
         elif(selectionChoice == 3):
             print("-" * 30)
             try:
-                printChoice = int(input("What would you like to check?\n1: Good Habits\n2: Bad Habit\n3: Both Habits\n4:Return to menu "))
+                printChoice = int(input("What would you like to check?\n1: Good Habits\n2: Bad Habit\n3: Both Habits\n4: Return to menu\n"))
             except ValueError:
                 print("-" * 30)
                 print("Invalid value")
@@ -71,6 +71,9 @@ def selection():
             print("-" * 30)
             editHabit()
         elif(selectionChoice == 5):
+            print("-" * 30)
+            habitStreak()
+        elif(selectionChoice == 6):
             selectionLoop = False
             return
         else:
@@ -78,7 +81,7 @@ def selection():
             print("Please enter a valid option")
             print("-" * 30)
 
-
+#Add try and excepts
 def addHabit():
     habitList = selectHabitList()
     habitMenuLoop = True
@@ -192,7 +195,6 @@ def printHabits(habitList, secondHabitList = []):
 
 
 #Add lines where needed
-
 def editHabit():
     editHabitLoop = True
     habitList = selectHabitList()
@@ -312,19 +314,40 @@ def leapYear(year):
     else:
         return False
 
-def habitStreak(habit):
+#Confirm once more to the user if they would like to increment the streak
+#Find the user to not be allowed to add a streak if they already done so on the same day
+def habitStreak():
+    habitList = selectHabitList()
+    print(30 * "-")
+    if(habitList == 0):
+        print("Returning to menu")
+        print(30 * "-")
+        return
+    if(isListEmpty(habitList)):
+        print("Nothing to remove in list, returning to menu")
+        return
+    habitIndex = selectHabit(habitList)
+    print(30 * "-")
+    if(habitIndex == "menu"):
+        return
     timeObject = time.localtime()
     currentDoY = int(time.strftime("%j", timeObject))
     currentYear = int(time.strftime("%Y", timeObject))
+    if(habitList[habitIndex].streak == 0):
+        habitList[habitIndex].streak += 1
+        return
     if(leapYear(currentYear)):
-        if((currentDoY == habit.lastRecordedDoY) or ((currentDoY == 1) and (habit.lastRecordedDoY == 366))):
-            habit.streak += 1
+        if((currentDoY == habitList[habitIndex].lastRecordedDoY + 1) or ((currentDoY == 1) and (habitList[habitIndex].lastRecordedDoY == 366))):
+            habitList[habitIndex].streak += 1
         else:
-            habit.streak = 0 
+            habitList[habitIndex].streak = 0 
     else:
-        if((currentDoY == habit.lastRecordedDoY) or ((currentDoY == 1) and (habit.lastRecordedDoY == 365))):
-            habit.streak += 1
+        if((currentDoY == habitList[habitIndex].lastRecordedDoY + 1) or ((currentDoY == 1) and (habitList[habitIndex].lastRecordedDoY == 365))):
+            habitList[habitIndex].streak += 1
         else:
-            habit.streak = 0
+            habitList[habitIndex].streak = 0
+    print("Current Streak:")
+    print(habitList[habitIndex].streak)
+    print("-" * 30)
 
 selection()
