@@ -1,10 +1,17 @@
+import time
+
 goodHabits = []
 badHabits = []
 
 class Habit:
-    def __init__(self, habitName, habitInstructions):
+    def __init__(self, habitName, habitInstructions, streak, lastRecordedDay, lastRecordedMonth, lastRecordedYear, lastRecordedDoY):
         self.habitName = habitName
         self.habitInstructions = habitInstructions
+        self.streak = streak
+        self.lastRecordedDay = lastRecordedDay
+        self.lastRecordedMonth = lastRecordedMonth
+        self.lastRecordedYear = lastRecordedYear
+        self.lastRecordedDoY = lastRecordedDoY
 
     def getHabitName(self):
         return self.habitName
@@ -18,6 +25,8 @@ class Habit:
     def setHabitInstructions(self, habitInstructions):
         self.habitInstructions = habitInstructions
 
+    def getStreak(self):
+        return self.streak
 
 def selection():
     selectionLoop = True
@@ -78,7 +87,18 @@ def addHabit():
         return
     habitName = input("Enter a habit name: ")
     habitInstructions = input("Enter your habit's instructions: ")
-    habitList.append(Habit(habitName, habitInstructions))
+    checkStreak = int(input("Have you done this habit today?\n1: Yes\n2: No\n3: Return to menu\n"))
+    if(checkStreak == 1):
+        timeObject = time.localtime()
+        currentDay = time.strftime("%d", timeObject)
+        currentMonth = time.strftime("%m", timeObject)
+        currentYear = time.strftime("%Y", timeObject)
+        currentDoY = time.strftime("%j", timeObject)
+        habitList.append(Habit(habitName, habitInstructions,1, currentDay, currentMonth, currentYear, currentDoY))
+    elif(checkStreak == 2):
+        habitList.append(Habit(habitName, habitInstructions,0, "N/A", "N/A", "N/A", "N/A"))
+    else:
+        return
     print("-" * 30)
     while(habitMenuLoop):
         try:
@@ -160,18 +180,19 @@ def printHabits(habitList, secondHabitList = []):
         return
     elif(isListEmpty(secondHabitList)):
         for habit in habitList:
-            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions) + "\nStreak: " + str(habit.streak))
     else:
         print("Good Habits:\n")
         for habit in habitList:
-            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions) + "\nStreak: " + str(habit.streak))
         print(30 * "-")
         print("Bad Habits:\n")
         for habit in secondHabitList:
-            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions))
+            print("Habit Name: " + str(habit.habitName) + "\nHabit Instructions: " + str(habit.habitInstructions) + "\nStreak: " + str(habit.streak))
 
 
 #Add lines where needed
+
 def editHabit():
     editHabitLoop = True
     habitList = selectHabitList()
@@ -280,5 +301,30 @@ def isListEmpty(habitList):
         return True
     else:
         return False
+
+
+#Added a leapYear function since it will help for the streak method
+def leapYear(year):
+    if((year % 4 == 0) and (year % 100 != 0)):
+        return True
+    elif((year % 4 == 0) and (year % 100 == 0) and (year % 400 == 0)):
+        return True
+    else:
+        return False
+
+def habitStreak(habit):
+    timeObject = time.localtime()
+    currentDoY = int(time.strftime("%j", timeObject))
+    currentYear = int(time.strftime("%Y", timeObject))
+    if(leapYear(currentYear)):
+        if((currentDoY == habit.lastRecordedDoY) or ((currentDoY == 1) and (habit.lastRecordedDoY == 366))):
+            habit.streak += 1
+        else:
+            habit.streak = 0 
+    else:
+        if((currentDoY == habit.lastRecordedDoY) or ((currentDoY == 1) and (habit.lastRecordedDoY == 365))):
+            habit.streak += 1
+        else:
+            habit.streak = 0
 
 selection()
