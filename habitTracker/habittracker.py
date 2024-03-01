@@ -82,6 +82,7 @@ def selection():
             print("-" * 30)
 
 #Add try and excepts
+#Add a while loop to force the user to answer if they've done or haven't done that habit today
 def addHabit():
     habitList = selectHabitList()
     habitMenuLoop = True
@@ -90,7 +91,7 @@ def addHabit():
         return
     habitName = input("Enter a habit name: ")
     habitInstructions = input("Enter your habit's instructions: ")
-    checkStreak = int(input("Have you done this habit today?\n1: Yes\n2: No\n3: Return to menu\n"))
+    checkStreak = int(input("Have you done this habit today?\n1: Yes\n2: No\n"))
     if(checkStreak == 1):
         timeObject = time.localtime()
         currentDay = time.strftime("%d", timeObject)
@@ -248,7 +249,7 @@ def editHabit():
         print(30 * "-")
         print("Invalid Input")
         print(30 * "-")
-        editAgain = input("Would you like to edit another habit?\n1: Yes\n2: No\n")
+        editAgain = int(input("Would you like to edit another habit?\n1: Yes\n2: No\n"))
         print(30 * "-")
 
 
@@ -316,6 +317,7 @@ def leapYear(year):
 
 #Confirm once more to the user if they would like to increment the streak
 #Find the user to not be allowed to add a streak if they already done so on the same day
+#Need to change the last recorded dates
 def habitStreak():
     habitList = selectHabitList()
     print(30 * "-")
@@ -333,19 +335,31 @@ def habitStreak():
     timeObject = time.localtime()
     currentDoY = int(time.strftime("%j", timeObject))
     currentYear = int(time.strftime("%Y", timeObject))
+
+    #This will be used to start a streak, if there's no current streak
     if(habitList[habitIndex].streak == 0):
         habitList[habitIndex].streak += 1
         return
+
+    #This will see if you already checked in to your habit today, if so, you will be unable to add to your streak
+    if(currentDoY == habitList[habitIndex].lastRecordedDoY):
+        print("Already checked in today, returning to menu")
+        print(30 * "-")
+        return
+    
+    #This is used to increment streak, can only increment the streak if the last recorded date is one day before the current date
     if(leapYear(currentYear)):
-        if((currentDoY == habitList[habitIndex].lastRecordedDoY + 1) or ((currentDoY == 1) and (habitList[habitIndex].lastRecordedDoY == 366))):
+        if((currentDoY == int(habitList[habitIndex].lastRecordedDoY) + 1) or ((currentDoY == 1) and (int(habitList[habitIndex].lastRecordedDoY) == 366))):
             habitList[habitIndex].streak += 1
         else:
             habitList[habitIndex].streak = 0 
     else:
-        if((currentDoY == habitList[habitIndex].lastRecordedDoY + 1) or ((currentDoY == 1) and (habitList[habitIndex].lastRecordedDoY == 365))):
+        if((currentDoY == int(habitList[habitIndex].lastRecordedDoY) + 1) or ((currentDoY == 1) and (int(habitList[habitIndex].lastRecordedDoY) == 365))):
             habitList[habitIndex].streak += 1
         else:
             habitList[habitIndex].streak = 0
+    
+    #Display Streak
     print("Current Streak:")
     print(habitList[habitIndex].streak)
     print("-" * 30)
