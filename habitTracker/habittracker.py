@@ -83,6 +83,8 @@ def selection():
 
 #Add try and excepts
 #Add a while loop to force the user to answer if they've done or haven't done that habit today
+#Make a streak a variable
+#Cast class attributes to appropriate data types
 def addHabit():
     habitList = selectHabitList()
     habitMenuLoop = True
@@ -253,7 +255,6 @@ def editHabit():
         print(30 * "-")
 
 
-#Make a while loop that doesn't let you leave until you input a valid option
 def selectHabit(habitList):
     habitLoop = True
     while(habitLoop):
@@ -270,7 +271,7 @@ def selectHabit(habitList):
             continue
         if(selectIndex == -1):
             return "menu"
-        elif((selectIndex < -1) or (selectIndex > len(habitList))):
+        elif((selectIndex < -1) or (selectIndex >= len(habitList))):
             print("Value Out of Bounds")
             continue
         else:
